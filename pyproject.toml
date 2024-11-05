@@ -1,0 +1,32 @@
+[project]
+name = "aidevs3"
+version = "0.1.0"
+description = "AI_devs3 course"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    { name = "Piotr Święcik", email = "piotr.swiecik@gmail.com" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Repository = "https://github.com/piotrswiecik/aidevs3"
+
+[tool.poetry]
+name = "aidevs3"
+version = "0.1.0"
+description = "AI_devs3 course"
+authors = ["Piotr Święcik <piotr.swiecik@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

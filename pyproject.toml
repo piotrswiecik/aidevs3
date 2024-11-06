@@ -32,6 +32,14 @@ aiohttp = "^3.10.10"
 langfuse = "^2.53.9"
 tiktoken = "^0.8.0"
 
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = [
+    "tests",
+    "integration",
+]
+log_cli = "True"
+log_cli_level = "INFO"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"

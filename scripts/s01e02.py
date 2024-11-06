@@ -8,7 +8,7 @@ from aidevs3.robot_verification import RobotVerification
 async def main():
     load_dotenv()
     API_KEY = os.getenv("OPENAI_API_KEY")
-    VERIFY_ENDPOINT = "https://xyz.ag3nts.org/verify"  # Replace with actual endpoint
+    VERIFY_ENDPOINT = os.getenv("AG3NTS_VERIFY_ENDPOINT")
     
     verifier = RobotVerification(API_KEY, VERIFY_ENDPOINT)
     success = await verifier.verify()

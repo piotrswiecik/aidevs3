@@ -1,5 +1,6 @@
 import openai
 import logging
+import aiohttp
 from typing import Dict, Literal, Optional
 
 

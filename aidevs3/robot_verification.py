@@ -1,5 +1,4 @@
 import openai
-import aiohttp
 import logging
 from typing import Dict, Literal, Optional
 
@@ -32,15 +31,12 @@ class RobotVerification:
         self.special_cases = {
             "poland_capital": {
                 "answer": "Kraków",
-                "patterns": ["asking about capital of Poland", "wants to know Poland's capital city"]
             },
             "hitchhiker_number": {
                 "answer": "69",
-                "patterns": ["reference to Hitchhiker's Guide number"]
             },
             "current_year": {
                 "answer": "1999",
-                "patterns": ["asking about current year", "wants to know what year it is"]
             }
         }
 

@@ -1,0 +1,80 @@
+memory_structure = """
+memory_areas:
+  legend:
+    category: "top-level category"
+    subcategory: "secondary category"
+    description: "description of the subcategory"
+  
+  categories:
+    - name: "profiles"
+      description: "personal and professional profiles"
+      subcategories:
+        - name: "basic"
+          description: "basic profiles of people, pets and other entities. Store here: name, traits, appearance, attitude, habits, age, origin, traits, descriptions"
+        - name: "work"
+          description: "projects, products, companies, professional experience"
+        - name: "development"
+          description: "gaining new skills, knowledge, learning something — here you can store the information about one's progress"
+        - name: "relationships"
+          description: "ONLY personal and professional connections between people"
+
+    - name: "preferences"
+      description: "hobbies, interests, and personal likes"
+      subcategories:
+        - name: "hobbies"
+          description: "hobbies and activities"
+        - name: "interests"
+          description: "areas of interest like music, gaming, reading, sports, design, psychology, science, business, marketing, etc."
+
+    - name: "resources"
+      description: "various resources and materials"
+      subcategories:
+        - name: "books"
+          description: "links, opinions, summaries, notes from books"
+        - name: "movies"
+          description: "links, opinions, reviews, notes from movies"
+        - name: "music"
+          description: "links, opinions, preferences"
+        - name: "videos"
+          description: "links to videos and podcasts"
+        - name: "images"
+          description: "links to photos, galleries, images"
+        - name: "apps"
+          description: "knowledge, links, tutorials, and knowledge about apps"
+        - name: "devices"
+          description: "links, tutorials, manuals, and knowledge about devices"
+        - name: "courses"
+          description: "online courses, webinars, live meetings, workshops"
+        - name: "articles"
+          description: "links to articles, blogs, newsletters, etc."
+        - name: "communities"
+          description: "links, descriptions, and notes about online communities"
+        - name: "channels"
+          description: "links to youtube channels, podcasts, and other media channels"
+        - name: "documents"
+          description: "links to papers, files, images, photos, etc."
+        - name: "notepad"
+          description: "personal notes, sketches, drafts, ideas, concepts"
+
+    - name: "events"
+      description: "important events"
+      subcategories:
+        - name: "personal"
+          description: "personal events like birthdays, anniversaries"
+        - name: "professional"
+          description: "work-related events like meetings, deadlines"
+
+    - name: "locations"
+      description: "geographical locations and places"
+      subcategories:
+        - name: "places"
+          description: "all locations and places"
+        - name: "favorites"
+          description: "favorite places and locations"
+
+    - name: "environment"
+      description: "current environmental context"
+      subcategories:
+        - name: "current"
+          description: "current environment information"
+"""

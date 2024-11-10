@@ -6,6 +6,7 @@ from typing import Annotated, Generator, Optional, TypeVar
 from uuid import uuid4
 from abc import ABC, abstractmethod
 from pydantic import BaseModel, Field
+from typing import Optional
 
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
@@ -62,7 +63,7 @@ class AIService(ABC):
     @abstractmethod
     def parse_json_response(self, response: ChatCompletion):
         """
-        Parses the response as a JSON object.
+        Parses the model stringified response into a JSON object.
         """
         pass
 
@@ -145,12 +146,13 @@ class AssistantService:
 
 
 class ChatMessage(BaseModel):
-    role: str
+    role: str = "user"
     content: str
+
 
 class ChatRequest(BaseModel):
     messages: list[ChatMessage]
-    conversation_id: str = Field(default_factory=lambda: str(uuid4()))
+    conversation_id: Optional[str] = Field(default_factory=lambda: str(uuid4()))
 
 
 @app.post("/chat")
@@ -158,6 +160,7 @@ async def chat(
     request: ChatRequest,
 ):
     assistant_service = AssistantService(OpenAIServiceImpl())
+
     # get only user messages
     messages = list(filter(lambda i: i.role == "user", request.messages))
 
@@ -168,6 +171,9 @@ async def chat(
         name=trace_name[:45],
     )
 
+    # use LLM agent to prepare queries that can be useful to recall information from memory
+    # example of such queries: "profiles:basic Who is Alice?", "profiles:basic Who is Adam?"
+    # generally they contain a category:subcategory and a query string
     queries = await assistant_service.extract_queries(request.messages, trace)
 
     return queries

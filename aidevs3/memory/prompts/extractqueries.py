@@ -1,4 +1,5 @@
 def create_extract_queries_prompt(memory_structure: str, knowledge: str) -> str:
+    """Provide memory structure and knowledge to system prompt - wrap them into meta-prompt description."""
     return f"""
         Alice, you're speaking with Adam now and you're thinking about the ongoing conversation.
 

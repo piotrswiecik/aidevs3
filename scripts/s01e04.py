@@ -315,7 +315,7 @@ import os
 import base64
 from pathlib import Path
 from dotenv import load_dotenv
-from aidevs3.services.ai import OpenAIService
+from aidevs3.services.ai_service import CompletionMessage, CompletionRequest, OpenAIService
 
 load_dotenv()
 
@@ -325,16 +325,9 @@ def encode_image(image_path):
 
 ai_service = OpenAIService(api_key=os.getenv("OPENAI_API_KEY"))
 
-messages = [
-    {
-    "role": "user",
-        "content": [
-            {
-                "type": "text",
-                "text": prompt_v6
-            },
-        ]
-    }
-]
-
-print(ai_service.custom_completion(messages, model="gpt-4o-mini", temperature=0.0))
+request = CompletionRequest(
+    messages=[CompletionMessage(role="user", content=prompt_v6)],
+    model="gpt-4o-mini",
+    temperature=0.0
+)
+print(ai_service.completion(request))

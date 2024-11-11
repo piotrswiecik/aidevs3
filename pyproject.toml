@@ -33,6 +33,7 @@ langfuse = "^2.53.9"
 tiktoken = "^0.8.0"
 fastapi = {extras = ["standard"], version = "^0.115.4"}
 slowapi = "^0.1.9"
+qdrant-client = {extras = ["fastembed"], version = "^1.12.1"}
 
 [tool.pytest.ini_options]
 minversion = "8.0"

@@ -8,7 +8,7 @@ import uvicorn
 from langfuse import Langfuse
 
 from aidevs3.qdrant.system_prompt import get_system_prompt
-from aidevs3.services.ai_service import CompletionRequest, OpenAIService
+from aidevs3.services.ai_service import OpenAICompletionRequest, OpenAIService
 from aidevs3.services.langfuse_service import CreateGenerationRequest, CreateTraceRequest, LangfuseService
 from aidevs3.services.vector_service import AsyncVectorService, VectorPointDto
 
@@ -51,7 +51,7 @@ async def chat(chat_request: ChatRequest):
     # similar messages are added to the conversation as context
     context_messages = [{"role": msg.payload["role"], "content": msg.payload["text"]} for msg in similar_messages]
 
-    completion_request = CompletionRequest(
+    completion_request = OpenAICompletionRequest(
         model="gpt-4o-mini",
         messages=[
             {"role": last_message.role, "content": last_message.content}, 

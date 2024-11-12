@@ -4,6 +4,7 @@
 from abc import ABC, abstractmethod
 from logging import Logger
 from typing import Any, Dict, List, Optional
+from ollama import Client
 
 from openai import OpenAI
 from pydantic import BaseModel
@@ -18,7 +19,12 @@ class CompletionMessage(BaseModel):
     name: Optional[str] = None
 
 
-class CompletionRequest(BaseModel):
+class BaseCompletionRequest(BaseModel):
+    messages: List[CompletionMessage]
+    model: str
+
+
+class OpenAICompletionRequest(BaseModel):
     messages: List[CompletionMessage]
     model: str = "gpt-4o-mini"
     stream: bool = False
@@ -27,9 +33,27 @@ class CompletionRequest(BaseModel):
     max_tokens: Optional[int] = None
 
 
+class OllamaCompletionRequest(BaseCompletionRequest):
+    pass
+
+
+class OllamaCompletionResponse(BaseModel):
+    message: Dict[str, Any]
+    created_at: str
+    done_reason: Optional[str] = None
+    done: bool
+    total_duration: float
+    load_duration: float
+    prompt_eval_count: int
+    prompt_eval_duration: float
+    eval_count: int
+    eval_duration: float
+    model: str
+
+
 class AIServiceBase(ABC):
     @abstractmethod
-    def completion(self, request: CompletionRequest) -> str:
+    def completion(self, request: OpenAICompletionRequest) -> str:
         pass
 
     @abstractmethod
@@ -59,7 +83,7 @@ class OpenAIService(AIServiceBase):
         self._logger = logger
         self._langfuse_service = langfuse_service
     
-    def completion(self, request: CompletionRequest) -> str:
+    def completion(self, request: OpenAICompletionRequest) -> str:
         """Send completion request to OpenAI service."""
         try:
             return self._client.chat.completions.create(
@@ -90,4 +114,22 @@ class OpenAIService(AIServiceBase):
 
 
 class LocalLlamaService(AIServiceBase):
-    pass
+    def __init__(self, model_url: str = "http://localhost:11434"):
+        self._client = Client(host=model_url)
+
+    def completion(self, request: OllamaCompletionRequest) -> str:
+        """Send completion request to hosted Ollama service."""
+        res = OllamaCompletionResponse(**self._client.chat(model=request.model, messages=[item.model_dump() for item in request.messages]))
+        return res.message["content"]
+    
+    def embedding(self, text: str) -> List[float]:
+        pass
+
+    def count_tokens(self, text: str) -> int:
+        pass
+
+    def parse_json_response(self, response: str) -> Dict[str, Any]:
+        pass
+
+    def is_stream_response(self) -> bool:
+        pass

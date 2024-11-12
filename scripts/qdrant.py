@@ -7,6 +7,7 @@ from pydantic import BaseModel
 import uvicorn
 from langfuse import Langfuse
 
+from aidevs3.qdrant.system_prompt import get_system_prompt
 from aidevs3.services.ai_service import CompletionRequest, OpenAIService
 from aidevs3.services.langfuse_service import CreateGenerationRequest, CreateTraceRequest, LangfuseService
 from aidevs3.services.vector_service import AsyncVectorService, VectorPointDto
@@ -37,11 +38,11 @@ async def chat(chat_request: ChatRequest):
     ai_service = OpenAIService(api_key=os.getenv("OPENAI_API_KEY"), langfuse_service=langfuse_service)
     vector_service = AsyncVectorService(ai_service)
 
-    trace = langfuse_service.create_trace(CreateTraceRequest(id=str(uuid.uuid4()), name="chat"))
+    last_message = user_messages[-1]
+
+    trace = langfuse_service.create_trace(CreateTraceRequest(id=str(uuid.uuid4()), name=f"chat-{last_message.content}"))
 
     await vector_service.create_collection(CONVERSATION_COLLECTION)
-
-    last_message = user_messages[-1]
     similar_messages = await vector_service.search(CONVERSATION_COLLECTION, last_message.content)
     print(f"found {len(similar_messages)} similar messages")
     for msg in similar_messages:
@@ -52,7 +53,10 @@ async def chat(chat_request: ChatRequest):
 
     completion_request = CompletionRequest(
         model="gpt-4o-mini",
-        messages=[{"role": last_message.role, "content": last_message.content}, *context_messages],
+        messages=[
+            {"role": last_message.role, "content": last_message.content}, 
+            {"role": "system", "content": get_system_prompt(context=context_messages)}
+        ],
     )
     answer = ai_service.completion(completion_request)
     langfuse_service.create_generation(

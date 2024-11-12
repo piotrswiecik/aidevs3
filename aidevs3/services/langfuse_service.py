@@ -23,9 +23,19 @@ class CreateSpanRequest(BaseModel):
 
 
 class CreateGenerationRequest(BaseModel):
+    """
+    Langfuse generation object.
+
+    Attributes:
+        name: str - name of the generation
+        input: Any - chat input
+        output: Any - model response
+        prompt: Any - langfuse prompt object
+    """
     name: str
-    input: Any = None
-    prompt: Any = None
+    input: Any = None # chat input
+    output: Any = None # model response
+    prompt: Any = None # langfuse prompt object
 
 
 class TokenUsage(BaseModel):
@@ -59,7 +69,7 @@ class LangfuseService:
         self._langfuse.flush()
 
     def create_generation(self, trace: StatefulTraceClient, request: CreateGenerationRequest):
-        return trace.generation(name=request.name, input=request.input, prompt=request.prompt)
+        return trace.generation(name=request.name, input=request.input, prompt=request.prompt, output=request.output)
     
     def finalize_generation(self, generation: StatefulGenerationClient, output: Any, model: str, usage: Optional[TokenUsage] = None):
         generation.update(output=output, model=model, usage=usage)

@@ -10,6 +10,7 @@ from qdrant_client.models import VectorParams
 from qdrant_client.http.models.models import Distance
 
 from aidevs3.services.ai_service import AIServiceBase
+from aidevs3.services.langfuse_service import LangfuseService
 
 
 EmbeddingProvider = TypeVar("EmbeddingProvider", bound=AIServiceBase)

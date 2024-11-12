@@ -8,6 +8,8 @@ from typing import Any, Dict, List, Optional
 from openai import OpenAI
 from pydantic import BaseModel
 
+from aidevs3.services.langfuse_service import LangfuseService
+
 
 class CompletionMessage(BaseModel):
     """A message in a completion request - equivalent to ChatCompletionMessageParam in OpenAI API spec."""
@@ -52,10 +54,11 @@ class AIServiceError(Exception):
 
 
 class OpenAIService(AIServiceBase):
-    def __init__(self, api_key: str, logger: Optional[Logger] = None):
+    def __init__(self, api_key: str, logger: Optional[Logger] = None, langfuse_service: Optional[LangfuseService] = None):
         self._client = OpenAI(api_key=api_key)
         self._logger = logger
-        
+        self._langfuse_service = langfuse_service
+    
     def completion(self, request: CompletionRequest) -> str:
         """Send completion request to OpenAI service."""
         try:

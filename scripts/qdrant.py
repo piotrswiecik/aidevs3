@@ -6,15 +6,12 @@ from fastapi import Depends, FastAPI
 from pydantic import BaseModel
 import uvicorn
 from langfuse import Langfuse
-from langfuse.decorators import observe
 
 from aidevs3.services.ai_service import CompletionRequest, OpenAIService
+from aidevs3.services.langfuse_service import CreateTraceRequest, LangfuseService
 from aidevs3.services.vector_service import AsyncVectorService, VectorPointDto
 
 load_dotenv()
-
-
-langfuse = Langfuse(public_key=os.getenv("LANGFUSE_PUBLIC_KEY"), secret_key=os.getenv("LANGFUSE_SECRET_KEY"))
 
 
 class Message(BaseModel):
@@ -31,14 +28,15 @@ app = FastAPI()
 CONVERSATION_COLLECTION = "conversations"
 
 @app.post("/chat")
-@observe(name="qdrant_chat")
 async def chat(chat_request: ChatRequest):
     user_messages = filter(lambda m: m.role == "user", chat_request.messages)
-
-    ai_service = OpenAIService(api_key=os.getenv("OPENAI_API_KEY"))
+    
+    # TODO: convert langfuse service to something more generic
+    langfuse_service = LangfuseService()
+    ai_service = OpenAIService(api_key=os.getenv("OPENAI_API_KEY"), langfuse_service=langfuse_service)
     vector_service = AsyncVectorService(ai_service)
 
-    # TODO: add trace here
+    trace = langfuse_service.create_trace(CreateTraceRequest(id=str(uuid.uuid4()), name="chat"))
 
     await vector_service.create_collection(CONVERSATION_COLLECTION)
 
@@ -49,9 +47,8 @@ async def chat(chat_request: ChatRequest):
         print(f"similar msg id: {msg.id}, score: {msg.score}, payload: {msg.payload}")
 
     # similar messages are added to the conversation as context
-    context_messages = [Message(role=msg.payload["role"], content=msg.payload["text"]) for msg in similar_messages]
+    context_messages = [{"role": msg.payload["role"], "content": msg.payload["text"]} for msg in similar_messages]
 
-    # add trace here
     answer = ai_service.completion(CompletionRequest(
         model="gpt-4o-mini",
         messages=[{"role": last_message.role, "content": last_message.content}, *context_messages],
@@ -62,6 +59,8 @@ async def chat(chat_request: ChatRequest):
     await vector_service.add_points(
         CONVERSATION_COLLECTION, [VectorPointDto(id=str(uuid.uuid4()), text=last_message.content, role=last_message.role)]
     )
+
+    langfuse_service.finalize_trace(trace, input=last_message.content, output=answer)
 
     return {"message": "Hello, World!"}
 

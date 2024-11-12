@@ -73,7 +73,8 @@ class OpenAIService(AIServiceBase):
             raise AIServiceError(e)
         
     def embedding(self, text: str) -> List[float]:
-        raise NotImplementedError()
+        res = self._client.embeddings.create(input=text, model="text-embedding-3-large")
+        return res.data[0].embedding
     
     def count_tokens(self, text: str) -> int:
         raise NotImplementedError()

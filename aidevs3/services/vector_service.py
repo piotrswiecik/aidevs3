@@ -50,4 +50,4 @@ class AsyncVectorService:
 
     async def search(self, collection_name: str, query: str, limit: int = 5):
         embedding = self._embedding_provider.embedding(query)
-        return await self._client.search(collection_name, query_vector=embedding, limit=limit, with_payload=True)
+        return await self._client.search(collection_name, query_vector=embedding, limit=limit, with_payload=True, with_vectors=False)

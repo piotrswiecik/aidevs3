@@ -68,7 +68,7 @@ async def chat(chat_request: ChatRequest):
 
     langfuse_service.finalize_trace(trace, input=last_message.content, output=answer)
 
-    return {"message": "Hello, World!"}
+    return {"answer": answer}
 
 
 if __name__ == "__main__":

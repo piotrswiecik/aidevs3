@@ -164,3 +164,4 @@ cython_debug/
 data.json
 parsed_data.json
 .memories
+data/

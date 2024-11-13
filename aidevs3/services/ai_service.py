@@ -15,7 +15,7 @@ from aidevs3.services.langfuse_service import LangfuseService
 class CompletionMessage(BaseModel):
     """A message in a completion request - equivalent to ChatCompletionMessageParam in OpenAI API spec."""
     role: str = "user"
-    content: str
+    content: str | Dict[str, Any]
     name: Optional[str] = None
 
 

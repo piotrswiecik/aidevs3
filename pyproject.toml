@@ -35,6 +35,7 @@ fastapi = {extras = ["standard"], version = "^0.115.4"}
 slowapi = "^0.1.9"
 qdrant-client = {extras = ["fastembed"], version = "^1.12.1"}
 ollama = "^0.3.3"
+openai-whisper = "^20240930"
 
 [tool.pytest.ini_options]
 minversion = "8.0"

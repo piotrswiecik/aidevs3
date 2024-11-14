@@ -36,6 +36,10 @@ slowapi = "^0.1.9"
 qdrant-client = {extras = ["fastembed"], version = "^1.12.1"}
 ollama = "^0.3.3"
 openai-whisper = "^20240930"
+runpod = "^1.7.4"
+python-multipart = "^0.0.17"
+mistralai = "^1.2.2"
+opencv-python = "^4.10.0.84"
 
 [tool.pytest.ini_options]
 minversion = "8.0"

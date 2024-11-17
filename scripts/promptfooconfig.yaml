@@ -1,0 +1,72 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+
+# Learn more about building a configuration: https://promptfoo.dev/docs/configuration/guide
+
+description: "s02e04"
+
+prompts:
+  - "{{ content }}"
+
+providers: 
+- id: file://s02e04.py:eval_process_text
+
+tests:
+  - vars:
+      content: "Zauważono dziwne zwierzę na terenie fabryki."
+    assert:
+      - type: "equals"
+        value: "other"
+
+  - vars:
+      content: "Zauważono ruch na terenie fabryki. Okazało się że to włamywacz."
+    assert:
+      - type: "equals"
+        value: "people"
+
+  - vars:
+      content: "Schwytano intruza na terenie fabryki."
+    assert:
+      - type: "equals"
+        value: "people"
+
+  - vars:
+      content: "Zauważono dziwne światło na terenie fabryki."
+    assert:
+      - type: "equals"
+        value: "other"
+
+  - vars:
+      content: "Ludzie pracujący w fabryce narzekają na niesmaczne jedzenie w stołówce."
+    assert:
+      - type: "equals"
+        value: "other"
+
+  - vars:
+      content: "W ubiegłym miesiącu z pracy w fabryce odeszło kilka osób."
+    assert:
+      - type: "equals"
+        value: "other"
+
+  - vars:
+      content: "Bulbalizator kwantowy na trzeciej linii produkcyjnej wymagał wymiany."
+    assert:
+      - type: "equals"
+        value: "hardware"
+
+  - vars:
+      content: "Przeprowadzono rutynową kontrolę sprzętu produkcyjnego."
+    assert:
+      - type: "equals"
+        value: "other"
+
+  - vars:
+      content: "Zainstalowano nową wersję Linuxa na głównym serwerze fabryki."
+    assert:
+      - type: "equals"
+        value: "other"
+
+  - vars:
+      content: "Ciągle tylko dostajemy do jedzenia ziemniaki. Ludzie mają tego dosyć."
+    assert:
+      - type: "equals"
+        value: "other"

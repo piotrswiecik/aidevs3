@@ -167,3 +167,5 @@ parsed_data.json
 data/
 
 **/*.pkl
+
+.DS_Store

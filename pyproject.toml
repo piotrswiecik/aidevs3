@@ -46,6 +46,7 @@ langchain-groq = "^0.2.1"
 langchain-mistralai = "^0.2.1"
 llama-index = "^0.12.1"
 transformers = {extras = ["torch"], version = "^4.46.3"}
+neo4j = "^5.26.0"
 
 [tool.pytest.ini_options]
 minversion = "8.0"
